@@ -1,0 +1,64 @@
+/*
+
+Columns
+======
+
+Columns is a very simple layout helper for fluid grids with fixed or fluid gutters.
+
+
+Example use:
+
+$grid = {
+  columns: 12,
+  gutter: 30px,
+}
+
+.Grid
+  column-background($grid)
+
+.Grid__unit
+  margin-right: $grid.gutter
+  float left
+
+.Grid__unit--quarter
+  column-width($grid, 3) // 3:12
+
+.Grid__unit--half
+  column-width($grid, 6) // 6:12
+
+*/
+
+
+// Calculates and returns a width based on a number of columns to span
+
+column-width-value($grid, $span, $modify = 0) {
+  m = $modify
+  g = $grid.gutter
+  s = ($grid.columns / $span)
+
+  w_ = 'calc(100% / %s - %s / %s)'      % (s ((s - 1) * g) s)
+  wM = 'calc(100% / %s - %s / %s + %s)' % (s ((s - 1) * g) s m)
+  return m ? wM : w_
+}
+
+
+column-width($grid, $span) {
+  width column-width-value($grid, $span, 0)
+}
+
+
+// Provides a background of your grid's layout columns
+
+column-background($grid) {
+  c = rgba(pink, 0.2)
+  w = column-width-value($grid, 1)
+  w2 = column-width-value($grid, 1, $grid.gutter)
+
+  background-image 'repeating-linear-gradient(90deg,
+    %s 0,
+    %s %s,
+    rgba(0, 0, 0, 0) %s,
+    rgba(0, 0, 0, 0) %s
+  )' % (c c w w w2)
+}
+
